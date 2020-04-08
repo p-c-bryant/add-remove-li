@@ -26,6 +26,13 @@ const upCaseLi = document.getElementsByTagName('li');
             ul.insertBefore(li, prevLi);
           }
         }
+        if (event.target.className == 'down') {
+          let li = event.target.parentNode;
+          let nextLi = li.nextElementSibling;
+          let ul = li.parentNode;
+          
+          ul.insertBefore(nextLi, li);
+        }
       }
   });
   
@@ -52,7 +59,7 @@ descriptionButton.addEventListener('click', () => {
 addItemButton.addEventListener('click', () => {
   let ul = document.getElementsByTagName('ul')[0];
   let li = document.createElement('li');
-  li.textContent = addItemInput.value;
+  li.innerHTML = addItemInput.value + '<button class="up">Up</button><button class="down">Down</button><button class="remove">Remove</button>';
   ul.appendChild(li);
   addItemInput.value = '';
 });
