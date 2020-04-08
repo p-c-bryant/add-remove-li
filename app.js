@@ -6,8 +6,32 @@ const descriptionButton = document.querySelector('button.description');
 const addItemInput = document.querySelector('input.addItemInput');
 const addItemButton = document.querySelector('button.addItemButton');
 const listUl = listDiv.querySelector('ul');
+const lis = listUl.children;
 
 const upCaseLi = document.getElementsByTagName('li');
+
+
+function attachLiButtons(li) {
+  let up = document.createElement('button');
+  up.className = 'up';
+  up.textContent = 'up';
+  li.appendChild(up);
+  
+  let down = document.createElement('button');
+  down.className = 'down';
+  down.textContent = 'down';
+  li.appendChild(down);
+
+  
+  let remove = document.createElement('button');
+  remove.className = 'remove';
+  remove.textContent = 'remove';
+  li.appendChild(remove); 
+}
+
+for (let i = 0; i < lis.length; i++) {
+  attachLiButtons(lis[i]);
+}
 
 // Event handler to cap / uncap li elements when mouseover or mouseout
   listUl.addEventListener('click', (event) => {
@@ -59,7 +83,8 @@ descriptionButton.addEventListener('click', () => {
 addItemButton.addEventListener('click', () => {
   let ul = document.getElementsByTagName('ul')[0];
   let li = document.createElement('li');
-  li.innerHTML = addItemInput.value + '<button class="up">Up</button><button class="down">Down</button><button class="remove">Remove</button>';
+  li.innerHTML = addItemInput.value;
+  attachLiButtons(li);
   ul.appendChild(li);
   addItemInput.value = '';
 });
