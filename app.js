@@ -1,17 +1,18 @@
-const toggleList = document.getElementById('toggleList');
-const listDiv = document.querySelector('.list');
-const descriptionInput = document.querySelector('input.description');
-const descriptionP = document.querySelector('p.description');
-const descriptionButton = document.querySelector('button.description');
-const addItemInput = document.querySelector('input.addItemInput');
-const addItemButton = document.querySelector('button.addItemButton');
-const listUl = listDiv.querySelector('ul');
-const lis = listUl.children;
+const list = document.querySelector('.list');
+const toggleList = document.querySelector('#toggleList');
 
-const upCaseLi = document.getElementsByTagName('li');
+const ul = document.querySelector('ul');
+const addItemButton = document.querySelector('.addItemButton');
+const addItemInput = document.querySelector('.addItemInput');
 
 
-function attachLiButtons(li) {
+const description = document.querySelector('.description');
+const descriptionButton = document.querySelector('.description-button');
+
+const listItems = ul.children;
+
+
+function attachLiButtons (li) {
   let up = document.createElement('button');
   up.className = 'up';
   up.textContent = 'up';
@@ -21,79 +22,66 @@ function attachLiButtons(li) {
   down.className = 'down';
   down.textContent = 'down';
   li.appendChild(down);
-
   
   let remove = document.createElement('button');
   remove.className = 'remove';
   remove.textContent = 'remove';
-  li.appendChild(remove); 
+  li.appendChild(remove);
+};
+
+for (let i = 0; i < listItems.length; i++) {
+    attachLiButtons(listItems[i]);
 }
 
-for (let i = 0; i < lis.length; i++) {
-  attachLiButtons(lis[i]);
-}
-
-// Event handler to cap / uncap li elements when mouseover or mouseout
-  listUl.addEventListener('click', (event) => {
-      if (event.target.tagName == 'BUTTON'){
-        if (event.target.className == 'remove') {
-          let li = event.target.parentNode;
-          let ul = li.parentNode;
-          ul.removeChild(li);
-        }
-        if (event.target.className == 'up') {
-          let li = event.target.parentNode;
-          let prevLi = li.previousElementSibling;
-          let ul = li.parentNode;
-          
-          if (prevLi) {
-            ul.insertBefore(li, prevLi);
-          }
-        }
-        if (event.target.className == 'down') {
-          let li = event.target.parentNode;
-          let nextLi = li.nextElementSibling;
-          let ul = li.parentNode;
-          
-          ul.insertBefore(nextLi, li);
-        }
-      }
-  });
-  
-  
-
-// Event handler to toggle content on button click
+// Toggles list when Hide list button clicked
 toggleList.addEventListener('click', () => {
-  if (listDiv.style.display == 'none') {
-    toggleList.textContent = 'Hide list';
-    listDiv.style.display = 'block';
+    if (list.style.display == 'none') {
+    list.style.display = 'block';
   } else {
-    toggleList.textContent = 'Show list';                        
-    listDiv.style.display = 'none';
-  }                         
+    list.style.display = 'none';
+  }
 });
 
-// Event handler to add content to P element based on user input
+
+// Adds li to list with Add item button and input field
+addItemButton.addEventListener('click', () => {   
+   if (addItemInput.value) {
+   ul.innerHTML += `<li>${addItemInput.value}</li>`
+   
+   let addedItem = ul.lastChild;
+   attachLiButtons(addedItem);
+   addItemInput.value = '';
+   } else {
+     alert('Add an item to the input field.');
+   }
+});
+
+
+// Changes list description with Change list description buton and input field
 descriptionButton.addEventListener('click', () => {
-  descriptionP.innerHTML = descriptionInput.value + ':';
-  descriptionInput.value = '';
-});
+    let descriptionContent = document.querySelector('input.description').value;
 
-// Event handler to add li element to end of ul based on user input
-addItemButton.addEventListener('click', () => {
-  let ul = document.getElementsByTagName('ul')[0];
-  let li = document.createElement('li');
-  li.innerHTML = addItemInput.value;
-  attachLiButtons(li);
-  ul.appendChild(li);
-  addItemInput.value = '';
+    if (descriptionContent) {
+      description.textContent = descriptionContent + ':';
+    } else {
+     alert('Add an item to the input field.');      
+    }
 });
 
 
-  
-  
-  
-  
-  
-  
-  
+// Perform action based on up, down, remove button click 
+
+document.addEventListener('click', (event) => {
+  let currentLi = event.target.parentNode;     
+
+  if (event.target.className == 'up' && currentLi.previousElementSibling){
+    ul.insertBefore(currentLi, currentLi.previousElementSibling);    
+  } else if (event.target.className == 'down' && currentLi.nextElementSibling) {
+    ul.insertBefore(currentLi.nextElementSibling, currentLi);    
+  } else if (event.target.className == 'remove') {
+    ul.removeChild(currentLi);    
+  }
+});
+
+
+
